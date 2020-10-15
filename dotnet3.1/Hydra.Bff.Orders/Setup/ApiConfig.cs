@@ -1,3 +1,4 @@
+using Hydra.Bff.Orders.Extensions;
 using Hydra.WebAPI.Core.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +13,9 @@ namespace Hydra.Bff.Orders.Setup
          public static void AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllers();
-
+            
+            services.Configure<AppServicesSettings>(configuration);
+            
             services.AddCors(options =>{
                 options.AddPolicy("BFFOrders", builder =>
                     builder.AllowAnyOrigin()
@@ -33,6 +36,8 @@ namespace Hydra.Bff.Orders.Setup
             app.UseRouting();
 
             app.UseCors("BFFOrders");
+
+            app.UseAuthConfiguration();
 
             app.UseEndpoints(endpoints =>
             {

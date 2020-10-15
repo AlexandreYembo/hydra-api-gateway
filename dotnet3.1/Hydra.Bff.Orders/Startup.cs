@@ -1,4 +1,5 @@
 using Hydra.Bff.Orders.Setup;
+using Hydra.WebAPI.Core.Identity;
 using Hydra.WebAPI.Core.Setups;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,8 +22,10 @@ namespace Hydra.Bff.Orders
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApiConfiguration(Configuration);
+            services.AddJwtConfiguration(Configuration);
             services.AddSwaggerConfig();
             services.RegisterServices();
+            services.AddMessageBusConfiguration(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
