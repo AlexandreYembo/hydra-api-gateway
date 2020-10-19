@@ -3,12 +3,13 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Hydra.Core.Communication;
 
 namespace Hydra.Bff.Orders.Services
 {
     public abstract class Service
     {
-        protected StringContent GetContext(object data) =>
+        protected StringContent GetContent(object data) =>
             new StringContent(
                 JsonSerializer.Serialize(data),
                 Encoding.UTF8,
@@ -30,6 +31,11 @@ namespace Hydra.Bff.Orders.Services
 
             responseMessage.EnsureSuccessStatusCode();
             return true;
+        }
+
+        protected ResponseResult ReturnOk()
+        {
+            return new ResponseResult();
         }
     }
 }
