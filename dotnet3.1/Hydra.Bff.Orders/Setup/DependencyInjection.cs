@@ -25,7 +25,25 @@ namespace Hydra.Bff.Orders.Setup
                     .AddPolicyHandler(PollyExtensions.WaitAndRetry())
                     .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
-             services.AddHttpClient<IBasketService, BasketService>()
+            services.AddHttpClient<IBasketService, BasketService>()
+                    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
+                    .AddPolicyHandler(PollyExtensions.WaitAndRetry())
+                    .AllowSelfSignedCertificate()
+                    .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+
+            services.AddHttpClient<IVoucherService, VoucherService>()
+                    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
+                    .AddPolicyHandler(PollyExtensions.WaitAndRetry())
+                    .AllowSelfSignedCertificate()
+                    .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+
+            services.AddHttpClient<ICustomerService, CustomerService>()
+                    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
+                    .AddPolicyHandler(PollyExtensions.WaitAndRetry())
+                    .AllowSelfSignedCertificate()
+                    .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+
+            services.AddHttpClient<IOrderService, OrderService>()
                     .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
                     .AddPolicyHandler(PollyExtensions.WaitAndRetry())
                     .AllowSelfSignedCertificate()

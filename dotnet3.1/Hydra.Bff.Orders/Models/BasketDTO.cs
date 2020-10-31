@@ -6,6 +6,8 @@ namespace Hydra.Bff.Orders.Models
     {
         public decimal TotalPrice { get; set; }
         public decimal Discount { get; set; }
+        public VoucherDTO Voucher { get; set; }
         public List<BasketItemDTO> Items { get; set; } = new List<BasketItemDTO>();
+        public bool HasVoucher { get; set; }
     }
 }

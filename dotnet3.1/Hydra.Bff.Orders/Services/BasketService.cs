@@ -14,6 +14,8 @@ namespace Hydra.Bff.Orders.Services
         Task<ResponseResult> AddBasketItem(BasketItemDTO item);
         Task<ResponseResult> UpdateBasketItem(Guid productId, BasketItemDTO item);
         Task<ResponseResult> RemoveBasketItem(Guid productId);
+
+        Task<ResponseResult> ApplyBasketVoucher(VoucherDTO voucher);
     }
 
     public class BasketService : Service, IBasketService
@@ -56,6 +58,15 @@ namespace Hydra.Bff.Orders.Services
         {
             var response = await _httpClient.DeleteAsync($"/basket/{productId}");
 
+            if(!CheckResponseError(response)) return await DeserializeResponseObject<ResponseResult>(response);
+
+            return ReturnOk();
+        }
+
+        public async Task<ResponseResult> ApplyBasketVoucher(VoucherDTO voucher)
+        {
+            var response = await _httpClient.PostAsync("/basket/apply-voucher", GetContent(voucher));
+            
             if(!CheckResponseError(response)) return await DeserializeResponseObject<ResponseResult>(response);
 
             return ReturnOk();

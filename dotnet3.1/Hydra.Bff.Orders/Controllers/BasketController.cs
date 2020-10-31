@@ -14,11 +14,13 @@ namespace Hydra.Bff.Orders.Controllers
     {
         private readonly IBasketService _basketService;
         private readonly ICatalogService _catalogService;
+        private readonly IVoucherService _voucherService;
 
-        public BasketController(IBasketService basketService, ICatalogService catalogService)
+        public BasketController(IBasketService basketService, ICatalogService catalogService, IVoucherService voucherService)
         {
             _basketService = basketService;
             _catalogService = catalogService;
+            _voucherService = voucherService;
         }
 
         [HttpGet]
@@ -28,7 +30,7 @@ namespace Hydra.Bff.Orders.Controllers
             return CustomResponse(await _basketService.GetBasket());
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("order/basket-quantity")]
         public async Task<int> GetBasketQuantity()
         {
@@ -81,6 +83,23 @@ namespace Hydra.Bff.Orders.Controllers
             return CustomResponse(await _basketService.RemoveBasketItem(productId));
         }
 
+        [HttpPost]
+        [Route("order/basket/apply-voucher")]
+        public async Task<IActionResult> ApplyVoucher([FromBody] string voucherCode)
+        {
+            var voucher = await _voucherService.GetVoucherByCode(voucherCode);
+
+            if(voucher is null)
+            {
+                AddErrors("Invalid voucher");
+                return CustomResponse();
+            }
+
+            var result = await _basketService.ApplyBasketVoucher(voucher);
+            
+            return CustomResponse(result);
+        }
+
         private async Task BasketItemValidation(CatalogItemDTO product, int quantity)
         {
             if(product == null) AddErrors("Product does not exist");
@@ -89,13 +108,13 @@ namespace Hydra.Bff.Orders.Controllers
             var basket = await _basketService.GetBasket();
             var basketItem = basket.Items.FirstOrDefault(p => p.ProductId == product.Id);
 
-            if(basketItem != null && basketItem.Qty + quantity > product.QtyStock)
+            if(basketItem != null && basketItem.Qty + quantity > product.Qty)
             {
-                AddErrors($"Product {product.Name} has {product.QtyStock} quantities available, you have selected {quantity} quantities");
+                AddErrors($"Product {product.Name} has {product.Qty} quantities available, you have selected {quantity} quantities");
                 return;
             }
 
-            if(quantity > product.QtyStock) AddErrors($"Product {product.Name} has {product.QtyStock} quantities available, you have selected {quantity} quantities");
+            if(quantity > product.Qty) AddErrors($"Product {product.Name} has {product.Qty} quantities available, you have selected {quantity} quantities");
         }
     }
 }
