@@ -36,13 +36,16 @@ namespace Hydra.Bff.Orders.Controllers
                 AddErrors("Basket is empty");
                 return CustomResponse();
             }
-
-            var voucher = await _voucherService.GetVoucherByCode(basket.Voucher?.Code);
-
-            if(voucher == null)
+            VoucherDTO voucher = null;
+            if(basket.Voucher != null)
             {
-                AddErrors("Voucher is invalid");
-                return CustomResponse();
+                voucher = await _voucherService.GetVoucherByCode(basket.Voucher?.Code);
+
+                if(voucher == null)
+                {
+                    AddErrors("Voucher is invalid");
+                    return CustomResponse();
+                }
             }
 
             var products = await _catalogService.GetItems(basket.Items.Select(i => i.ProductId));
@@ -108,7 +111,6 @@ namespace Hydra.Bff.Orders.Controllers
                     }
 
                     basketItem.Price = catalogProduct.Price;
-
                     var addResponse = await _basketService.AddBasketItem(basketItem);
 
                     if(ResponseHasErrors(addResponse))
