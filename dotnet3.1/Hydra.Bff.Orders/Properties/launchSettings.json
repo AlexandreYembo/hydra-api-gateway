@@ -20,7 +20,7 @@
     "Hydra.Bff.Orders": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "swagger",
       "applicationUrl": "https://localhost:46001;http://localhost:46000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

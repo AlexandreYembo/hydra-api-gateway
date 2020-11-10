@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Hydra.Bff.Orders.Models;
 using Hydra.Bff.Orders.Services;
+using Hydra.Bff.Orders.Services.gRPC;
 using Hydra.WebAPI.Core.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +14,17 @@ namespace Hydra.Bff.Orders.Controllers
     public class BasketController : MainController
     {
         private readonly IBasketService _basketService;
+        private readonly IBasketGrpcService _basketGrpcService;
         private readonly ICatalogService _catalogService;
         private readonly IVoucherService _voucherService;
 
-        public BasketController(IBasketService basketService, ICatalogService catalogService, IVoucherService voucherService)
+        public BasketController(IBasketService basketService,
+                                IBasketGrpcService basketGrpcService,
+                                ICatalogService catalogService, 
+                                IVoucherService voucherService)
         {
             _basketService = basketService;
+            _basketGrpcService = basketGrpcService;
             _catalogService = catalogService;
             _voucherService = voucherService;
         }
@@ -31,6 +37,13 @@ namespace Hydra.Bff.Orders.Controllers
         }
 
         [HttpGet]
+        [Route("order/gRPC/basket")]
+        public async Task<IActionResult> GetgRPC()
+        {
+            return CustomResponse(await _basketGrpcService.GetBasket());
+        }
+
+        [HttpGet] 
         [Route("order/basket-quantity")]
         public async Task<int> GetBasketQuantity()
         {

@@ -1,6 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.13.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.33.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
   </ItemGroup>
@@ -9,11 +14,16 @@
     <ProjectReference Include="..\..\hydra-core\dotnet3.1\Hydra.Core\Hydra.Core.csproj" />
     <ProjectReference Include="..\..\hydra-core\dotnet3.1\Hydra.Core.MessageBus\Hydra.Core.MessageBus.csproj" />
     <ProjectReference Include="..\..\hydra-core\dotnet3.1\Hydra.WebAPI.Core\Hydra.WebAPI.Core.csproj" />
+    <ProjectReference Include="..\..\hydra-core\dotnet3.1\Hydra.gRPC.Core\Hydra.gRPC.Core.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+   <ItemGroup>
+    <!-- During the compilation, it will generate the base of the client -->
+		<Protobuf Include="Protos\basket.proto" GrpcServices="Client" />
+	</ItemGroup>
 
 </Project>

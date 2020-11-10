@@ -26,6 +26,7 @@ namespace Hydra.Bff.Orders
             services.AddSwaggerConfig();
             services.RegisterServices();
             services.AddMessageBusConfiguration(Configuration);
+            services.RegisterGrpcService(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
