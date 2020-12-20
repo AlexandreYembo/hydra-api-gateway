@@ -27,20 +27,20 @@ namespace Hydra.Bff.Orders.Setup
 
             services.AddHttpClient<IBasketService, BasketService>()
                     .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-                    .AddPolicyHandler(PollyExtensions.WaitAndRetry())
                     .AllowSelfSignedCertificate()
+                    .AddPolicyHandler(PollyExtensions.WaitAndRetry())
                     .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
             services.AddHttpClient<IVoucherService, VoucherService>()
                     .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-                    .AddPolicyHandler(PollyExtensions.WaitAndRetry())
                     .AllowSelfSignedCertificate()
+                    .AddPolicyHandler(PollyExtensions.WaitAndRetry())
                     .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
             services.AddHttpClient<ICustomerService, CustomerService>()
                     .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-                    .AddPolicyHandler(PollyExtensions.WaitAndRetry())
                     .AllowSelfSignedCertificate()
+                    .AddPolicyHandler(PollyExtensions.WaitAndRetry())
                     .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
             services.AddHttpClient<IOrderService, OrderService>()
